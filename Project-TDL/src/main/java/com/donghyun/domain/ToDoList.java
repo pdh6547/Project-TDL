@@ -5,13 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table
 @Getter
 @NoArgsConstructor
-public class ToDoList {
+public class ToDoList implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,4 +38,16 @@ public class ToDoList {
         this.createdDate = createdDate;
         this.completedDate = completedDate;
     }
+
+    public void setCreatedDateNow() {
+        this.createdDate = LocalDateTime.now();
+    }
+
+    public void update(ToDoList toDoList) {
+        this.description = toDoList.getDescription();
+        this.status = toDoList.getStatus();
+        this.createdDate = LocalDateTime.now();
+        this.completedDate = LocalDateTime.now();
+    }
+
 }

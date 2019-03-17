@@ -28,6 +28,7 @@
                 <th class="col-md-2">완료 날짜</th>
                 <th class="col-md-5">삭제</th>
                 <th class="col-md-5">수정</th>
+                <th id="col-md-10">완료</th>
                 <th></th>
             </tr>
             </thead>
@@ -39,13 +40,14 @@
                 <td th:text="${list.createdDate} ? ${#temporals.format(list.createdDate,'yyyy-MM-dd HH:mm')} : ${list.createdDate}"></td>
                 <td th:text="${list.completedDate} ? ${#temporals.format(list.completedDate,'yyyy-MM-dd HH:mm')} : ${list.completedDate}"></td>
                 <td>
-                    <button  data-th-value="${list.idx}" class="delete"><img class="trash2" src="/images/trash.png" ></button>
-                    <!--th:value="${list.idx}"-->
+                    <button  data-th-value="${list.idx}" class="delete"><img id="trash" src="/images/trash.png" ></button>
                 </td>
                 <td>
-                    <!--<button class="btn btn-primary" onclick="window.open('update', '_blank', 'width=500px,height=500px,toolbars=no,scrollbars=no')">Update</button>-->
-                    <button class="btn btn-primary" onclick="prompt('수정할 내용을 입력하세요'); ">Update</button>
-                    <!--<button th:value="${list.idx}" class="update">Update</button>-->
+                    <input id="list_created_date" type="hidden" th:value="${list?.createdDate}">
+                    <button type="button" data-th-value="${list.idx}" class="update">Update</button>
+                </td>
+                <td >
+                    <input type="checkbox" name="complete">
                 </td>
             </tr>
             </tbody>
@@ -88,9 +90,8 @@
         });
     });
     $('.delete').click(function () {
-        var id = $(this).val();
         $.ajax({
-            url: "http://localhost:8080/api/" + id,
+            url: "http://localhost:8080/api/delete/" + $(this).val(),
             type: "DELETE",
             success: function () {
                 alert('삭제 성공!');
@@ -101,21 +102,49 @@
             }
         });
     });
-    // function removeUser(${list.idx}) {
-    //     // var id = $(this).val();
+
+    // function myFunction() {
+    //     var updateDes = prompt("내용을 입력하세요", "");
+    //     var jsonDate = JSON.stringify({
+    //         description: updateDes.val()
+    //     });
     //     $.ajax({
-    //         type: "DELETE",
-    //         url: "http://localhost:8080/api/" + $('list.idx').val(),
+    //         url: "http://localhost:8081/api/update/" + $(this).val(),
+    //         type: "PUT",
+    //         data: jsonDate,
+    //         contentType: "application/json",
+    //         dataType: "json",
     //         success: function () {
-    //             // window.location.reload();
-    //             $('#list').remove();
+    //             alert('수정 성공!');
+    //             location.href = '/tdl/list';
     //         },
-    //
     //         error: function () {
-    //             alert('삭제 실패!');
+    //             alert('수정 실패!');
     //         }
     //     });
     // }
+    $('.update').click(function () {
+        var updateDes = prompt("내용을 입력하세요", "");
+        var jsonData = JSON.stringify({
+            description: updateDes,
+            createdDate: $('#list_create_date').val()
+        });
+        console.log(updateDes);
+        $.ajax({
+            url: "http://localhost:8080/api/update/" + $(this).val(),
+            type: "PUT",
+            data: jsonData,
+            contentType: "application/json",
+            dataType: "json",
+            success: function () {
+                alert('수정 성공!');
+                location.href = '/tdl/list';
+            },
+            error: function () {
+                alert('수정 실패!');
+            }
+        });
+    });
 </script>
 </body>
 </html>

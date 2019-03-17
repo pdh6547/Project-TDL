@@ -31,7 +31,7 @@ public class ToDoListRestController {
         return new ResponseEntity<>("{}", HttpStatus.CREATED);
     }
 
-    @PutMapping("/{idx}")
+    @PutMapping("/update/{idx}")
     public ResponseEntity<?> putList(@PathVariable("idx")Long idx, @RequestBody ToDoList toDoList) {
         ToDoList persistList = toDoListRepository.getOne(idx);
         persistList.update(toDoList);
@@ -39,7 +39,7 @@ public class ToDoListRestController {
         return new ResponseEntity<>("{}", HttpStatus.OK);
     }
 
-    @DeleteMapping("/{idx}")
+    @DeleteMapping("/delete/{idx}")
     public ResponseEntity<?> deleteList(@PathVariable("idx")Long idx) {
         toDoListRepository.deleteById(idx);
         return new ResponseEntity<>("{}", HttpStatus.OK);

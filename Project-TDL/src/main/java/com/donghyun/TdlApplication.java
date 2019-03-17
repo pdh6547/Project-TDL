@@ -25,8 +25,6 @@ public class TdlApplication {
 
             IntStream.rangeClosed(1, 10).forEach(index -> toDoListRepository.save(ToDoList.builder()
                     .description("설명" + index)
-                    .status(true)
-                    .completedDate(LocalDateTime.now())
                     .createdDate(LocalDateTime.now())
                     .build()
             ));

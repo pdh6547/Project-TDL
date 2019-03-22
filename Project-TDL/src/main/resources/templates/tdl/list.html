@@ -5,77 +5,58 @@
     <title>ToDoList</title>
     <link href="https://fonts.googleapis.com/css?family=Do+Hyeon" rel="stylesheet">
     <link rel="stylesheet" href="/css/bootstrap.css">
-    <link rel="stylesheet" href="/css/Stylesheet.css">
+    <link rel="stylesheet" href="/css/Stylesheet.css?ver=3">
 
 </head>
 <body style="font-family: 'Do Hyeon', sans-serif; font-size: 20px">
-<div class="jumbotron" align="center">
+<!--<div class="jumbotron" align="center">-->
+<div align="center">
     <div class="page-header" style="text-align: center">
         <h1>To Do List</h1>
     </div>
     <div id="register">
-        <input id="description" type="text" />
-        <button class="btn btn-primary"  id="insert">등록</button>
+        <form class="form-inline" onsubmit="return false">
+            <input id="description" type="text"/>
+            <button class="btn btn-primary" id="insert">등록</button>
+        </form>
     </div>
     <div id="mainHide" align="center">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th class="col-md-1">#</th>
-                <th class="col-md-2">완료 여부</th>
-                <th class="col-md-5">내용</th>
-                <th class="col-md-2">생성 날짜</th>
-                <th class="col-md-2">완료 날짜</th>
-                <th class="col-md-5">삭제</th>
-                <th class="col-md-5">수정</th>
-                <th id="col-md-10">완료</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="list : ${list}">
-                <td th:text="${list.idx}"></td>
-                <td th:text="${list.status}"></td>
-                <td th:text="${list.description}"></td>
-                <td th:text="${list.createdDate} ? ${#temporals.format(list.createdDate,'yyyy-MM-dd HH:mm')} : ${list.createdDate}"></td>
-                <td th:text="${list.completedDate} ? ${#temporals.format(list.completedDate,'yyyy-MM-dd HH:mm')} : ${list.completedDate}"></td>
-                <td>
-                    <button  data-th-value="${list.idx}" class="delete"><img id="trash" src="/images/trash.png" ></button>
-                </td>
-                <td>
-                    <input id="list_created_date" type="hidden" th:value="${list?.createdDate}">
-                    <button type="button" data-th-value="${list.idx}" class="update">Update</button>
-                </td>
-                <td >
-                    <input type="checkbox" name="complete">
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <div th:each="list : ${list}">
+            <div class="jumbotron">
+                <div class="jumbotron-left">
+                    <h2 th:text="${list.description}"></h2>
+                    <p>
+                        <span th:text="${list.createdDate} ? ${#temporals.format(list.createdDate,'yyyy-MM-dd HH:mm')} : ${list.createdDate}"> </span>
+                        <span> ~ </span>
+                        <span th:text="${list.completedDate} ? ${#temporals.format(list.completedDate,'yyyy-MM-dd HH:mm')} : ${list.completedDate}"></span>
+                    </p>
+                </div>
+                <div class="jumbotron-right">
+                    <p>
+                        <span>
+                        <input id="list_complete" type="hidden" th:value="${list?.completedDate}">
+                        <button type="button" data-th-value="${list.idx}" class="complete"><img class="img" name="img2"
+                                                                                                src="/images/check.png"></button>
+                        <button type="button" data-th-value="${list.idx}" class="update"><img class="img"
+                                                                                              src="/images/edit.png"></button>
+                        <button data-th-value="${list.idx}" class="delete"><img class="img"
+                                                                                src="/images/trash.png"></button>
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 <script src="/js/jquery.min.js"></script>
 <script>
-    // $(document).ready(function () {
-    //     $('p').each(
-    //         function (index) {
-    //             $(this).attr({
-    //                 'id': "delete"+index
-    //                 }
-    //             );
-    //         }
-    //     );
-    //     $('#btn1').click(function () {
-    //         alert($('#delete-0').text());
-    //
-    //     })
-    // });
     $('#insert').click(function () {
         var jsonData = JSON.stringify({
             description: $('#description').val()
         });
         $.ajax({
-            url: "http://localhost:8080/api",
+            url: "http://localhost:8080/tdl",
             type: "POST",
             data: jsonData,
             contentType: "application/json",
@@ -91,7 +72,7 @@
     });
     $('.delete').click(function () {
         $.ajax({
-            url: "http://localhost:8080/api/delete/" + $(this).val(),
+            url: "http://localhost:8080/tdl/delete/" + $(this).val(),
             type: "DELETE",
             success: function () {
                 alert('삭제 성공!');
@@ -102,38 +83,13 @@
             }
         });
     });
-
-    // function myFunction() {
-    //     var updateDes = prompt("내용을 입력하세요", "");
-    //     var jsonDate = JSON.stringify({
-    //         description: updateDes.val()
-    //     });
-    //     $.ajax({
-    //         url: "http://localhost:8081/api/update/" + $(this).val(),
-    //         type: "PUT",
-    //         data: jsonDate,
-    //         contentType: "application/json",
-    //         dataType: "json",
-    //         success: function () {
-    //             alert('수정 성공!');
-    //             location.href = '/tdl/list';
-    //         },
-    //         error: function () {
-    //             alert('수정 실패!');
-    //         }
-    //     });
-    // }
     $('.update').click(function () {
         var updateDes = prompt("내용을 입력하세요", "");
-        var jsonData = JSON.stringify({
-            description: updateDes,
-            createdDate: $('#list_create_date').val()
-        });
         console.log(updateDes);
         $.ajax({
-            url: "http://localhost:8080/api/update/" + $(this).val(),
+            url: "http://localhost:8080/tdl/update/" + $(this).val(),
             type: "PUT",
-            data: jsonData,
+            data: updateDes,
             contentType: "application/json",
             dataType: "json",
             success: function () {
@@ -142,6 +98,26 @@
             },
             error: function () {
                 alert('수정 실패!');
+            }
+        });
+    });
+    $('.complete').click(function () {
+        document.img2.src = "/images/checked.png";
+        var jsonData = JSON.stringify({
+            completedDate: $('#list_complete').val()
+        });
+        $.ajax({
+            url: "http://localhost:8080/tdl/complete/" + $(this).val(),
+            type: "PUT",
+            data: jsonData,
+            contentType: "application/json",
+            dataType: "json",
+            success: function () {
+                alert('완료!');
+                location.href = '/tdl/list';
+            },
+            error: function () {
+                alert('완료 실패!');
             }
         });
     });

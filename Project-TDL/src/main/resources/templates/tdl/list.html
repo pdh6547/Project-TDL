@@ -13,9 +13,13 @@
 <div align="center">
     <div class="page-header" style="text-align: center">
         <h1>To Do List</h1>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Sign Out"/>
+        </form>
         <!--<button id="logout" style="text-align: right" onclick="location.href='/tdl/logout'" class="btn-primary">Logout-->
         <!--</button>-->
     </div>
+
     <div id="register">
         <form class="form-inline" onsubmit="return false">
             <input id="description" type="text"/>

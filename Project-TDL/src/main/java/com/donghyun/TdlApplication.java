@@ -16,16 +16,16 @@ public class TdlApplication {
         SpringApplication.run(TdlApplication.class, args);
     }
 
-    @Bean
-    public CommandLineRunner runner(UserRepository userRepository) throws Exception {
-        return (args) -> {
-
-            User user = userRepository.save(User.builder()
-                    .password("test")
-                    .email("havi@gmail.com")
-                    .build());
-        };
-    }
+//    @Bean
+//    public CommandLineRunner runner(UserRepository userRepository) throws Exception {
+//        return (args) -> {
+//
+//            User user = userRepository.save(User.builder()
+//                    .password("test")
+//                    .email("havi@gmail.com")
+//                    .build());
+//        };
+//    }
     @Bean
     public FilterRegistrationBean filterRegistrationBean() {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();

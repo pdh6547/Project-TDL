@@ -8,14 +8,10 @@
 </head>
 <body>
 <div class="login-form">
-    <!--<form onsubmit="return false">-->
-        <!--<input type="text" id="email" class="text-field" placeholder="아이디"><br>-->
-        <!--<input type="password" id="password" class="text-field" placeholder="비밀번호"><br>-->
-        <!--<input type="submit" value="로그인" class="submit-btn">-->
     <form th:action="@{/login}" method="post">
-        <div><label> User Name : <input type="text" name="username"/> </label></div>
-        <div><label> Password: <input type="password" name="password"/> </label></div>
-        <div><input type="submit" value="Sign In"/></div>
+        <input type="text" name = "username" id="email" class="text-field" placeholder="아이디"><br>
+        <input type="password" name = "password" id="password" class="text-field" placeholder="비밀번호"><br>
+        <input type="submit" value="로그인" class="submit-btn">
     </form>
 
     <div class="links">

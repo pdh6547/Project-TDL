@@ -41,7 +41,6 @@ public class ToDoListService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-//        all = userRepository.findByEmail(email);
         System.out.println(email);
         User user = userRepository.findByEmail(email);
         List<GrantedAuthority> authorities = new ArrayList<>();

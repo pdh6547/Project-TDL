@@ -13,6 +13,8 @@
 <div align="center">
     <div class="page-header" style="text-align: center">
         <h1>To Do List</h1>
+        <!--<button id="logout" style="text-align: right" onclick="location.href='/tdl/logout'" class="btn-primary">Logout-->
+        <!--</button>-->
     </div>
     <div id="register">
         <form class="form-inline" onsubmit="return false">
@@ -35,12 +37,10 @@
                     <p>
                         <span>
                         <input id="list_complete" type="hidden" th:value="${list?.completedDate}">
-                        <button type="button" data-th-value="${list.idx}" class="complete"><img class="img" name="img2"
-                                                                                                src="/images/check.png"></button>
-                        <button type="button" data-th-value="${list.idx}" class="update"><img class="img"
-                                                                                              src="/images/edit.png"></button>
-                        <button data-th-value="${list.idx}" class="delete"><img class="img"
-                                                                                src="/images/trash.png"></button>
+                        <button type="button" data-th-value="${list.idx}" th:if="!${list.status}" class="complete"><img class="img" name="img2" src="/images/check.png"></button>
+                        <button type="button" data-th-value="${list.idx}" th:if="${list.status}" class="complete"><img class="img" name="img2" src="/images/checked.png"></button>
+                        <button type="button" data-th-value="${list.idx}" class="update"><img class="img" src="/images/edit.png"></button>
+                        <button data-th-value="${list.idx}" class="delete"><img class="img" src="/images/trash.png"></button>
                         </span>
                     </p>
                 </div>

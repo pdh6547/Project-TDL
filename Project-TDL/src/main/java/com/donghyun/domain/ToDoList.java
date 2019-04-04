@@ -1,9 +1,6 @@
 package com.donghyun.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,12 +11,13 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+//@ToString
 public class ToDoList implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Long idx;
+    private Integer idx;
 
     @Column
     private String description;
@@ -33,7 +31,7 @@ public class ToDoList implements Serializable {
     @Column
     private LocalDateTime completedDate;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private User user;
 
     @Builder
@@ -53,7 +51,13 @@ public class ToDoList implements Serializable {
     }
 
     public void complete() {
-        this.status=true;
-        this.completedDate = LocalDateTime.now();
+        if(status==null) {
+            this.status = true;
+            this.completedDate = LocalDateTime.now();
+        }
+        else {
+            this.status = null;
+            this.completedDate = null;
+        }
     }
 }

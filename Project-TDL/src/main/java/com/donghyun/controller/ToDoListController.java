@@ -5,6 +5,7 @@ import com.donghyun.domain.User;
 import com.donghyun.repository.ToDoListRepository;
 import com.donghyun.repository.UserRepository;
 import com.donghyun.service.ToDoListService;
+import com.donghyun.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,29 +18,28 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/tdl")
 public class ToDoListController {
 
-    private final ToDoListService toDoListService;
+    @Autowired
+    ToDoListService toDoListService;
 
-    public ToDoListController(ToDoListService toDoListService) {
-        this.toDoListService = toDoListService;
-    }
+    @Autowired
+    UserService userService;
 
     @Autowired
     ToDoListRepository toDoListRepository;
 
-    @Autowired
-    UserRepository userRepository;
-
     private User all;
+
+    //list 페이지 이동
     @GetMapping({"/list"})
     public String list(Model model, User user) {
         org.springframework.security.core.userdetails.User all2 = (org.springframework.security.core.userdetails.User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        all = toDoListService.findUser(all2.getUsername());
+        all = userService.findUser(all2.getUsername());
         System.out.println("all.name : "+all);
         model.addAttribute("list", toDoListService.findList(all));
         return "/tdl/list";
     }
 
-//    todoList 등록
+    //todoList 등록
     @PostMapping
     public ResponseEntity<?> postToDoList(@RequestBody ToDoList toDoList) {
         toDoList.setUser(all);
@@ -72,11 +72,5 @@ public class ToDoListController {
     public ResponseEntity<?> deleteList(@PathVariable("idx") Integer idx) {
         toDoListRepository.deleteById(idx);
         return new ResponseEntity<>("{}", HttpStatus.OK);
-    }
-
-    @GetMapping("/logout")
-    public String logoutUser() {
-        this.all = null;
-        return "redirect:/login";
     }
 }

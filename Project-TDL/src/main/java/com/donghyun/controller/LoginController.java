@@ -24,50 +24,44 @@ public class LoginController {
     @Autowired
     ToDoListService toDoListService;
 
+    //로그인 페이지로 이동
     @GetMapping("/login")
     public String login() {
         return "/login";
     }
 
+    //로그인 성공시 list 페이지로 이동
     @GetMapping("/loginSuccess")
     public String loginComplete() {
         System.out.println("로그인 성공");
-
         return "redirect:/tdl/list";
     }
 
+    //회원가입 페이지로 이동
     @GetMapping("/register")
     public String register() {
         return "/register";
     }
 
+    //회원가입 성공시 User에 저장 (Password를 암호화)
     @PostMapping("register/create")
-    public ResponseEntity<?> postToDoList(@RequestBody User user)  {
+    public ResponseEntity<?> postToDoList(@RequestBody User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        if(user.getEmail().equals(userRepository.findByEmail(user.getEmail()))){
-//            return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
-//        }
-//        else{
-            userRepository.save(user);
-            return new ResponseEntity<>("{}", HttpStatus.CREATED);
-//        }
+        userRepository.save(user);
+        return new ResponseEntity<>("{}", HttpStatus.CREATED);
     }
-//    !email.equals(userRepository.findByEmail(user.getEmail()))
+
+    //회원가입시 중복 검사
     @PostMapping("/register/commit")
     public ResponseEntity<?> commitUser(@RequestBody User user) {
         System.out.println(user.getEmail());
         String email = user.getEmail();
         User createUser = userRepository.findByEmail(email);
 
-//        if(!userRepository.findByEmail(user.getEmail()).equals(email)) {
-//            return new ResponseEntity<>("{}", HttpStatus.OK);
-//        }
-        if(createUser==null){
+        if (createUser == null) {
             return new ResponseEntity<>("{}", HttpStatus.OK);
-        }
-        else {
+        } else {
             return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
         }
     }
-
 }

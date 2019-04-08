@@ -11,8 +11,9 @@
 <body>
 <div class="login-form">
     <input type="email" name="email" id="mail" class="text-field" placeholder="email"><br>
+    <p id="mailSuccess"></p>
     <input type="password" name="password" id="password" class="text-field" placeholder="password"><br>
-    <input type="button" value="중복체크" id="commit" class="submit-btn">
+    <p id="passwordSuccess"></p>
     <input type="button" value="회원가입" id="register" class="submit-btn">
     <div class="links">
         <a href="http://localhost:8080/login">뒤로가기</a>
@@ -20,56 +21,4 @@
 </div>
 </body>
 <script src="/js/jquery.min.js"></script>
-<script>
-    var check = 0;
-
-    $('#commit').click(function () {
-        var jsonData = JSON.stringify({
-            email: $('#mail').val()
-        });
-        // var email = $('mail').val();
-        $.ajax({
-            url: "http://localhost:8080/register/commit",
-            type: "POST",
-            data: jsonData,
-            contentType: "application/json",
-            dataType: "json",
-            success: function () {
-                check = 1;
-                alert('사용가능합니다!');
-            },
-            error: function () {
-                alert('중복입니다!');
-            }
-        });
-
-    });
-    $('#register').click(function () {
-        if(check === 1) {
-            var jsonData = JSON.stringify({
-                email: $('#mail').val(),
-                password: $('#password').val()
-            });
-            $.ajax({
-                url: "http://localhost:8080/register/create",
-                type: "POST",
-                data: jsonData,
-                contentType: "application/json",
-                dataType: "json",
-                success: function () {
-                    alert('회원가입 성공!');
-                    location.href = '/login';
-                },
-
-                error: function () {
-                    alert('회원가입 실패!');
-                }
-            });
-        }
-        if(check === 0) {
-            alert("중복체크를 하세요")
-        }
-
-    });
-
-</script>
+<script src="/js/register.js"></script>

@@ -3,7 +3,6 @@ package com.donghyun.controller;
 import com.donghyun.domain.ToDoList;
 import com.donghyun.domain.User;
 import com.donghyun.repository.ToDoListRepository;
-import com.donghyun.repository.UserRepository;
 import com.donghyun.service.ToDoListService;
 import com.donghyun.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

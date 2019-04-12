@@ -5,13 +5,14 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table
 @Getter
 @Setter
 @NoArgsConstructor
-//@ToString
 public class ToDoList implements Serializable {
 
     @Id
@@ -34,14 +35,19 @@ public class ToDoList implements Serializable {
     @ManyToOne
     private User user;
 
+    @OneToMany(mappedBy = "toDoList", fetch = FetchType.EAGER)
+    private List<Reply> reply= new ArrayList<>();
+
     @Builder
-    public ToDoList(String description, Boolean status, LocalDateTime createdDate, LocalDateTime completedDate, User user) {
+    public ToDoList(String description, Boolean status, LocalDateTime createdDate, LocalDateTime completedDate, User user, List<Reply> reply) {
         this.description = description;
         this.status = status;
         this.createdDate = createdDate;
         this.completedDate = completedDate;
         this.user = user;
+        this.reply = reply;
     }
+
     public void setCreatedDateNow() {
         this.createdDate = LocalDateTime.now();
     }

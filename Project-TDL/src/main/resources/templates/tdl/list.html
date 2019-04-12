@@ -26,8 +26,9 @@
             <button class="btn btn-primary" id="insert">등록</button>
         </form>
     </div>
-    <div id="mainHide" align="center">
-        <div th:each="list : ${list}">
+    <div th:each="list : ${list}" id="mainHide" align="center">
+        <div>
+            <!--<div th:each="list : ${list}">-->
             <div class="jumbotron">
                 <div class="jumbotron-left">
                     <h2 th:text="${list.description}"></h2>
@@ -47,14 +48,52 @@
                         <button data-th-value="${list.idx}" class="delete"><img class="img" src="/images/trash.png"></button>
                         </span>
                     </p>
+                    <p>
+                        <span>
+                            <button data-th-value="${list.idx}" class="reply">댓글</button>
+                        </span>
+                    </p>
                 </div>
             </div>
+        </div>
+        <div style="display: none" class="replyDiv">
+            <input style="width: 40%" class="replyText" type="text"/>
+            <button type="button" class="replyAdd">ADD</button>
         </div>
 
     </div>
 </div>
 <script src="/js/jquery.min.js"></script>
 <script>
+
+    $('.reply').click(function() {
+        var thisValue = $(this).parent().parent().parent().parent().parent().parent().find(".replyDiv");
+        thisValue.toggle("slow");
+    });
+
+    //댓글 추가
+    $('.replyAdd').click(function () {
+        var jsonData = JSON.stringify({
+            // to_Do_List_idx: $(this.val()),
+            content: $('.replyText').val()
+        });
+        $.ajax({
+            url: "http://localhost:8080/reply",
+            type: "POST",
+            data: jsonData,
+            contentType: "application/json",
+            dataType: "json",
+            success: function () {
+                alert('저장 성공!');
+                location.href = '/tdl/list';
+            },
+            error: function () {
+                alert('저장 실패!');
+            }
+        });
+    });
+
+    //리스트 등록
     $('#insert').click(function () {
         var jsonData = JSON.stringify({
             description: $('#description').val()
@@ -74,6 +113,7 @@
             }
         });
     });
+    //리스트 삭제
     $('.delete').click(function () {
         $.ajax({
             url: "http://localhost:8080/tdl/delete/" + $(this).val(),
@@ -87,6 +127,7 @@
             }
         });
     });
+    //리스트 수정
     $('.update').click(function () {
         var updateDes = prompt("내용을 입력하세요", "");
         console.log(updateDes);
@@ -105,6 +146,7 @@
             }
         });
     });
+    //리스트 완료
     $('.complete').click(function () {
         document.img2.src = "/images/checked.png";
         var jsonData = JSON.stringify({

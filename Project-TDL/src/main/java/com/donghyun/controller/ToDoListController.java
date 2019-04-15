@@ -3,6 +3,7 @@ package com.donghyun.controller;
 import com.donghyun.domain.ToDoList;
 import com.donghyun.domain.User;
 import com.donghyun.repository.ToDoListRepository;
+import com.donghyun.service.ReplyService;
 import com.donghyun.service.ToDoListService;
 import com.donghyun.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,10 @@ public class ToDoListController {
     @Autowired
     ToDoListRepository toDoListRepository;
 
+
+    @Autowired
+    ReplyService replyService;
+
     private User all;
 
     //list 페이지 이동
@@ -33,7 +38,6 @@ public class ToDoListController {
     public String list(Model model, User user) {
         org.springframework.security.core.userdetails.User all2 = (org.springframework.security.core.userdetails.User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         all = userService.findUser(all2.getUsername());
-        System.out.println("all.name : "+all);
         model.addAttribute("list", toDoListService.findList(all));
         return "/tdl/list";
     }

@@ -56,9 +56,13 @@
                 </div>
             </div>
         </div>
-        <div style="display: none" class="replyDiv">
+        <!--<div style="display: none" class="replyDiv">-->
+        <div class="replyDiv">
             <input style="width: 40%" class="replyText" type="text"/>
-            <button type="button" class="replyAdd">ADD</button>
+            <button data-th-value="${list.idx}" type="button" class="replyAdd">ADD</button>
+            <div>
+                <h4 th:each="reply : ${list.replies}" th:text="${reply.content}"></h4>
+            </div>
         </div>
 
     </div>
@@ -69,16 +73,35 @@
     $('.reply').click(function() {
         var thisValue = $(this).parent().parent().parent().parent().parent().parent().find(".replyDiv");
         thisValue.toggle("slow");
+
+
+
+        // $.ajax({
+        //     url: "http://localhost:8080/reply/list/" + $(this).val(),
+        //     type: "GET",
+        //     // data: jsonData,
+        //     // contentType: "application/json",
+        //     // dataType: "json",
+        //     success: function () {
+        //         alert('로드 성공!');
+        //         location.href = '/tdl/list';
+        //     },
+        //     error: function () {
+        //         alert('로드 실패!');
+        //     }
+        // });
+
     });
 
     //댓글 추가
     $('.replyAdd').click(function () {
+        var v = $(this).val() -1;
+        var reply_text = $('.replyText').eq(v).val();
         var jsonData = JSON.stringify({
-            // to_Do_List_idx: $(this.val()),
-            content: $('.replyText').val()
+            content: reply_text
         });
         $.ajax({
-            url: "http://localhost:8080/reply",
+            url: "http://localhost:8080/reply/" + $(this).val(),
             type: "POST",
             data: jsonData,
             contentType: "application/json",

@@ -1,9 +1,6 @@
 package com.donghyun.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class Reply implements Serializable {
 
     @Column
@@ -42,8 +40,7 @@ public class Reply implements Serializable {
         this.toDoList = toDoList;
     }
 
-    public void setCreatedDateNow2() {
+    public void setCreatedDateNow() {
         this.createdDate = LocalDateTime.now();
     }
-
 }

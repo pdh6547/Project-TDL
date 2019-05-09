@@ -1,6 +1,7 @@
 package com.donghyun.controller;
 
 import com.donghyun.domain.Reply;
+import com.donghyun.domain.ReplyDto;
 import com.donghyun.domain.ToDoList;
 import com.donghyun.repository.ReplyRepository;
 import com.donghyun.repository.ToDoListRepository;
@@ -34,22 +35,24 @@ public class ReplyController {
         ToDoList tdlIdx = toDoListRepository.getOne(idx);
         reply.setCreatedDateNow();
         reply.setToDoList(tdlIdx);
-        replyRepository.save(reply);
+        Reply reply1 = replyRepository.save(reply);
+        ReplyDto replyDto = new ReplyDto(reply1);
         toDoList.add(reply);
-        System.out.println("reply : "+reply);
-        System.out.println("getReplies : " + toDoList.getReplies());
 
-        System.out.println("findReply : "+replyService.findReply(tdlIdx));
-        return new ResponseEntity<>("{}", HttpStatus.CREATED);
+        return new ResponseEntity<>(replyDto, HttpStatus.CREATED);
     }
 
-//    @GetMapping({"/list"})
-//    public String reply(Model model) {
-//        ToDoList toDoList = new ToDoList();
-//        ToDoList tdlIdx = toDoListRepository.getOne(1);
-//        model.addAttribute("reply", replyService.findReply(tdlIdx));
-//        model.addAttribute("reply", replyService.findReply(tdlIdx));
-//
-//        return "redirect:/tdl/list";
-//    }
+    @PutMapping("/update/{idx}")
+    public ResponseEntity<?> putList(@PathVariable("idx") Integer idx, @RequestBody String content) {
+        Reply persistReply = replyRepository.getOne(idx);
+        persistReply.update(content);
+        replyRepository.save(persistReply);
+        return new ResponseEntity<>("{}", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{idx}")
+    public ResponseEntity<?> deleteReply(@PathVariable("idx") Integer idx) {
+        replyRepository.deleteById(idx);
+        return new ResponseEntity<>("{}", HttpStatus.OK);
+    }
 }

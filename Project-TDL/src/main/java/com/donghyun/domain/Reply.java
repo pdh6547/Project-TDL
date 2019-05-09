@@ -40,6 +40,10 @@ public class Reply implements Serializable {
         this.toDoList = toDoList;
     }
 
+    public void update(String content) {
+        this.content = content;
+    }
+
     public void setCreatedDateNow() {
         this.createdDate = LocalDateTime.now();
     }

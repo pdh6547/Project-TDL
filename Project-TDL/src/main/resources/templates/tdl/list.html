@@ -9,15 +9,12 @@
 
 </head>
 <body style="font-family: 'Do Hyeon', sans-serif; font-size: 20px">
-<!--<div class="jumbotron" align="center">-->
 <div align="center">
     <div class="page-header" style="text-align: center">
         <h1>To Do List</h1>
         <form th:action="@{/logout}" method="post">
             <input type="submit" value="Sign Out"/>
         </form>
-        <!--<button id="logout" style="text-align: right" onclick="location.href='/tdl/logout'" class="btn-primary">Logout-->
-        <!--</button>-->
     </div>
 
     <div id="register">
@@ -28,7 +25,6 @@
     </div>
     <div th:each="list : ${list}" id="mainHide" align="center">
         <div style="width: 60%">
-            <!--<div th:each="list : ${list}">-->
             <div class="jumbotron">
                 <div class="jumbotron-left">
                     <h2 th:text="${list.description}"></h2>
@@ -42,10 +38,14 @@
                     <p>
                         <span>
                         <input id="list_complete" type="hidden" th:value="${list?.completedDate}">
-                        <button type="button" data-th-value="${list.idx}" th:if="!${list.status}" class="complete"><img class="img" name="img2" src="/images/check.png"></button>
-                        <button type="button" data-th-value="${list.idx}" th:if="${list.status}" class="complete"><img class="img" name="img2" src="/images/checked.png"></button>
-                        <button type="button" data-th-value="${list.idx}" class="update"><img class="img" src="/images/edit.png"></button>
-                        <button data-th-value="${list.idx}" class="delete"><img class="img" src="/images/trash.png"></button>
+                        <button type="button" data-th-value="${list.idx}" th:if="!${list.status}" class="complete"><img
+                                class="img" name="img2" src="/images/check.png"></button>
+                        <button type="button" data-th-value="${list.idx}" th:if="${list.status}" class="complete"><img
+                                class="img" name="img2" src="/images/checked.png"></button>
+                        <button type="button" data-th-value="${list.idx}" class="update"><img class="img"
+                                                                                              src="/images/edit.png"></button>
+                        <button data-th-value="${list.idx}" class="delete"><img class="img"
+                                                                                src="/images/trash.png"></button>
                         </span>
                     </p>
                     <p>
@@ -56,140 +56,27 @@
                 </div>
             </div>
         </div>
-        <!--<div style="display: none" class="replyDiv">-->
-        <div class="replyDiv">
+        <!--<div style="display: none" style="width: 50%;" class="replyDiv">-->
+        <div class="replyDiv" onsubmit="return false" style="display:none; width: 60%;">
+            <ul class = "myList" style="list-style: none;">
+                <li th:each="reply : ${list.replies}">
+                    <div style="text-align: left;">
+                        <h4 th:text="${reply.content}"></h4>
+                    </div>
+                    <div style="text-align: right;">
+                        <button data-th-value="${reply.idx}" class="reply_update">수정</button>
+                        <button data-th-value="${reply.idx}" class="reply_delete">삭제</button>
+                    </div>
+                </li>
+            </ul>
             <input style="width: 40%" class="replyText" type="text"/>
-            <button data-th-value="${list.idx}" type="button" class="replyAdd">ADD</button>
-            <div>
-                <h4 th:each="reply : ${list.replies}" th:text="${reply.content}"></h4>
-            </div>
+            <button data-th-value="${list.idx}" type="submit" class="replyAdd">ADD</button>
         </div>
 
     </div>
 </div>
 <script src="/js/jquery.min.js"></script>
-<script>
+<script src="/js/list.js"></script>
 
-    $('.reply').click(function() {
-        var thisValue = $(this).parent().parent().parent().parent().parent().parent().find(".replyDiv");
-        thisValue.toggle("slow");
-
-
-
-        // $.ajax({
-        //     url: "http://localhost:8080/reply/list/" + $(this).val(),
-        //     type: "GET",
-        //     // data: jsonData,
-        //     // contentType: "application/json",
-        //     // dataType: "json",
-        //     success: function () {
-        //         alert('로드 성공!');
-        //         location.href = '/tdl/list';
-        //     },
-        //     error: function () {
-        //         alert('로드 실패!');
-        //     }
-        // });
-
-    });
-
-    //댓글 추가
-    $('.replyAdd').click(function () {
-        var v = $(this).val() -1;
-        var reply_text = $('.replyText').eq(v).val();
-        var jsonData = JSON.stringify({
-            content: reply_text
-        });
-        $.ajax({
-            url: "http://localhost:8080/reply/" + $(this).val(),
-            type: "POST",
-            data: jsonData,
-            contentType: "application/json",
-            dataType: "json",
-            success: function () {
-                alert('저장 성공!');
-                location.href = '/tdl/list';
-            },
-            error: function () {
-                alert('저장 실패!');
-            }
-        });
-    });
-
-    //리스트 등록
-    $('#insert').click(function () {
-        var jsonData = JSON.stringify({
-            description: $('#description').val()
-        });
-        $.ajax({
-            url: "http://localhost:8080/tdl",
-            type: "POST",
-            data: jsonData,
-            contentType: "application/json",
-            dataType: "json",
-            success: function () {
-                alert('저장 성공!');
-                location.href = '/tdl/list';
-            },
-            error: function () {
-                alert('저장 실패!');
-            }
-        });
-    });
-    //리스트 삭제
-    $('.delete').click(function () {
-        $.ajax({
-            url: "http://localhost:8080/tdl/delete/" + $(this).val(),
-            type: "DELETE",
-            success: function () {
-                alert('삭제 성공!');
-                location.href = '/tdl/list';
-            },
-            error: function () {
-                alert('삭제 실패!');
-            }
-        });
-    });
-    //리스트 수정
-    $('.update').click(function () {
-        var updateDes = prompt("내용을 입력하세요", "");
-        console.log(updateDes);
-        $.ajax({
-            url: "http://localhost:8080/tdl/update/" + $(this).val(),
-            type: "PUT",
-            data: updateDes,
-            contentType: "application/json",
-            dataType: "json",
-            success: function () {
-                alert('수정 성공!');
-                location.href = '/tdl/list';
-            },
-            error: function () {
-                alert('수정 실패!');
-            }
-        });
-    });
-    //리스트 완료
-    $('.complete').click(function () {
-        document.img2.src = "/images/checked.png";
-        var jsonData = JSON.stringify({
-            completedDate: $('#list_complete').val()
-        });
-        $.ajax({
-            url: "http://localhost:8080/tdl/complete/" + $(this).val(),
-            type: "PUT",
-            data: jsonData,
-            contentType: "application/json",
-            dataType: "json",
-            success: function () {
-                alert('완료!');
-                location.href = '/tdl/list';
-            },
-            error: function () {
-                alert('완료 실패!');
-            }
-        });
-    });
-</script>
 </body>
 </html>
